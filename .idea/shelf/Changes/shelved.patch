@@ -1,0 +1,163 @@
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+new file mode 100644
+--- /dev/null	(date 1711135738653)
++++ b/.idea/modules.xml	(date 1711135738653)
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectModuleManager">
++    <modules>
++      <module fileurl="file://$PROJECT_DIR$/.idea/Wanderstar.iml" filepath="$PROJECT_DIR$/.idea/Wanderstar.iml" />
++    </modules>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/Wanderstar.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/Wanderstar.iml b/.idea/Wanderstar.iml
+new file mode 100644
+--- /dev/null	(date 1711135894041)
++++ b/.idea/Wanderstar.iml	(date 1711135894041)
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module type="PYTHON_MODULE" version="4">
++  <component name="NewModuleRootManager">
++    <content url="file://$MODULE_DIR$" />
++    <orderEntry type="jdk" jdkName="Python 3.9 (Wanderstar)" jdkType="Python SDK" />
++    <orderEntry type="sourceFolder" forTests="false" />
++  </component>
++</module>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+--- /dev/null	(date 1711136168320)
++++ b/.idea/misc.xml	(date 1711136168320)
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Black">
++    <option name="sdkName" value="Python 3.9 (Wanderstar)" />
++  </component>
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (Wanderstar)" project-jdk-type="Python SDK" />
++</project>
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+--- /dev/null	(date 1711135738665)
++++ b/.idea/vcs.xml	(date 1711135738665)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/inspectionProfiles/profiles_settings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/inspectionProfiles/profiles_settings.xml b/.idea/inspectionProfiles/profiles_settings.xml
+new file mode 100644
+--- /dev/null	(date 1711135738662)
++++ b/.idea/inspectionProfiles/profiles_settings.xml	(date 1711135738662)
+@@ -0,0 +1,6 @@
++<component name="InspectionProjectProfileManager">
++  <settings>
++    <option name="USE_PROJECT_PROFILE" value="false" />
++    <version value="1.0" />
++  </settings>
++</component>
+\ No newline at end of file
+Index: .idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+new file mode 100644
+--- /dev/null	(date 1711135738747)
++++ b/.idea/.gitignore	(date 1711135738747)
+@@ -0,0 +1,3 @@
++# Default ignored files
++/shelf/
++/workspace.xml
+Index: git_pull_and_install.sh
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/git_pull_and_install.sh b/git_pull_and_install.sh
+new file mode 100755
+--- /dev/null	(date 1711136777308)
++++ b/git_pull_and_install.sh	(date 1711136777308)
+@@ -0,0 +1,21 @@
++#!/bin/bash
++
++# Find the directory containing requirements.txt
++# Search upwards from the current directory
++dir_with_requirements=$(dirname "$(realpath "$0")")
++while [[ ! -f "$dir_with_requirements/requirements.txt" ]]; do
++    dir_with_requirements=$(dirname "$dir_with_requirements")
++    if [ "$dir_with_requirements" == "/" ]; then
++        echo "Error: requirements.txt not found in any parent directory." >&2
++        exit 1
++    fi
++done
++
++# Change to the directory containing requirements.txt
++cd "$dir_with_requirements" || exit 1
++
++# Run git pull to update the repository
++git pull
++
++# Install dependencies from requirements.txt
++pip install -r requirements.txt
+\ No newline at end of file
+Index: requirements.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/requirements.txt b/requirements.txt
+new file mode 100644
+--- /dev/null	(date 1711136181144)
++++ b/requirements.txt	(date 1711136181144)
+@@ -0,0 +1,18 @@
++absl-py==2.1.0
++certifi==2024.2.2
++charset-normalizer==3.3.2
++h5py==3.10.0
++idna==3.6
++keras==3.1.1
++markdown-it-py==3.0.0
++mdurl==0.1.2
++ml-dtypes==0.3.2
++namex==0.0.7
++numpy==1.26.4
++opencv-python==4.9.0.80
++optree==0.10.0
++Pygments==2.17.2
++requests==2.31.0
++rich==13.7.1
++typing_extensions==4.10.0
++urllib3==2.2.1

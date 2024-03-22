@@ -7,6 +7,7 @@ import numpy as np
 import json
 import csv
 import sys
+# import tensorflow
 from keras.models import load_model
 from keras.applications.mobilenet_v2 import preprocess_input
 from keras.preprocessing import image
@@ -21,6 +22,7 @@ headers = {
     'Content-Type': 'application/json',
 }
 
+
 def switch(name, value):
     body = {
         'device': device_id,
@@ -32,6 +34,7 @@ def switch(name, value):
     }
     response = requests.put(base_url, headers=headers, json=body)
     print(response.text)
+
 
 def change_color(name, r, g, b):
     body = {
@@ -48,6 +51,7 @@ def change_color(name, r, g, b):
     }
     response = requests.put(base_url, headers=headers, json=body)
     print(response.text)
+
 
 def load_class_names_from_json(file_path):
     with open(file_path, 'r') as file:
@@ -66,6 +70,7 @@ def preprocess_image(image_path):
 def interpret_predictions(predictions, class_names):
     class_idx = np.argmax(predictions[0])
     return class_names[class_idx]
+
 
 model = load_model('best.h5')
 
@@ -174,11 +179,11 @@ while True:
 
     if len(points) > 0:
         current_point = points[0]
-        #print(f"Processing point: {current_point}")
+        # print(f"Processing point: {current_point}")
 
         if not blob_path or calculate_euclidean_distance(current_point, blob_path[-1]) > movement_threshold:
             blob_path.append(current_point)
-            #print(f"Point added to path: {current_point}")
+            # print(f"Point added to path: {current_point}")
 
         if len(blob_path) > 1:
             for i in range(1, len(blob_path)):
@@ -191,7 +196,7 @@ while True:
         cv2.imshow('Trace Image', trace_image)
         cv2.imshow('Gray Frame with Tracing', gray_frame)
     else:
-       # print('hi')
+        # print('hi')
         if len(blob_path) > 1:
             print('TRACED')
             imageCount += 1
@@ -222,7 +227,7 @@ while True:
 
             trace_image = np.zeros_like(frame_flipped)
             for i in range(1, len(blob_path)):
-                cv2.line(trace_image, tuple(np.intp(blob_path[i-1])), tuple(np.intp(blob_path[i])), (0, 0, 0), 15)
+                cv2.line(trace_image, tuple(np.intp(blob_path[i - 1])), tuple(np.intp(blob_path[i])), (0, 0, 0), 15)
             cv2.imwrite(f'pics/traces/{imageCount}_trace_image.png', trace_image)
         trace_image = None
         blob_path = []
