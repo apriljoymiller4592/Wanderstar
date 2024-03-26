@@ -141,30 +141,6 @@ while True:
 
     gray_frame = cv2.cvtColor(frame_flipped, cv2.COLOR_BGR2GRAY)
 
-    if cv2.waitKey(2) & 0xFF == ord('c'):
-        alpha -= 0.1
-        print('c')
-        print(alpha)
-    if cv2.waitKey(2) & 0xFF == ord('d'):
-        alpha += 0.1
-        print('d')
-        print(alpha)
-    if cv2.waitKey(2) & 0xFF == ord('g'):
-        beta += 10
-        print('g')
-        print(beta)
-    if cv2.waitKey(2) & 0xFF == ord('b'):
-        beta -= 10
-        print('b')
-        print(beta)
-    if cv2.waitKey(2) & 0xFF == ord('t'):
-        threshold += 10
-        print('t')
-        print(threshold)
-    if cv2.waitKey(2) & 0xFF == ord('y'):
-        threshold -= 10
-        print('y')
-        print(threshold)
     gray_frame = cv2.convertScaleAbs(gray_frame, alpha=alpha, beta=beta)
     ret, gray_frame = cv2.threshold(gray_frame, threshold, 255, cv2.THRESH_BINARY)  # 127 is highest threshhold
     keypoints = detector.detect(gray_frame)
