@@ -16,7 +16,7 @@ import bulb
 
 #import bulb
 class_to_label = "Not_Loaded_Yet"
-model = tf.keras.models.load_model('model/best_model.h5')
+model = tf.keras.models.load_model('model/best_qmodel.h5')
 with open('model/labels.json') as f:
     class_to_label = json.load(f)
 

@@ -1,32 +1,42 @@
-#import colour as c
+import requests
 import time
 
-# MAC_ADDRESS: 9C:3F:60:74:F4:C5:9F:4E
-# MODEL:: H6009
-from pygovee import Govee
-from pygovee.Govee import GoveeClient
+api_key = '306802d6-b755-4826-b6b1-c28b94bbc317'
+device_id = '9C:3F:60:74:F4:C5:9F:4E'
+base_url = 'https://developer-api.govee.com/v1/devices/control'
 
-delay = 2
-delayb = 10
+headers = {
+    'Govee-API-Key': api_key,
+    'Content-Type': 'application/json',
+}
 
-mac = "9C:3F:60:74:F4:C5:9F:4E"
-model = "H6009"
-# String = "WandLight: MAC_ADDRESS: 9C:3F:60:74:F4:C5:9F:4E, MODEL:: H6009"
-client: GoveeClient = Govee.GoveeClient(apiKey="306802d6-b755-4826-b6b1-c28b94bbc317")
-client.login()
-client.get_device_list()
+def switch(name, value):
+    body = {
+        'device': device_id,
+        'model': 'H6009',
+        'cmd': {
+            'name': name,
+            'value': value
+        }
+    }
+    response = requests.put(base_url, headers=headers, json=body)
+    print(response.text)
 
-time.sleep(5)
+def change_color(name, r, g, b):
+    body = {
+        'device': device_id,
+        'model': 'H6009',
+        'cmd': {
+            'name': name,
+            'value': {
+                'r': r,
+                'g': g,
+                'b': b
+            }
+        }
+    }
+    response = requests.put(base_url, headers=headers, json=body)
+    print(response.text)
 
-client.device_off(mac, model)
-print("off")
-time.sleep(delay)
 
-client.device_on(mac, model)
-print("device on")
-time.sleep(delay)
-
-def changeLight():
-    print("Changing Light")
-    #client.change_device_color(mac, model, r=15, g=45, b=87)
-    #time.sleep(delay)
+switch("turn", "off")
