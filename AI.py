@@ -13,14 +13,32 @@ from keras.applications.mobilenet_v2 import preprocess_input
 from keras.preprocessing import image
 import tensorflow as tf
 
-import bulb
-
-#model = tf.keras.models.load_model('best.h5')
+#import bulb
+class_to_label = "Not_Loaded_Yet"
+model = tf.keras.models.load_model('model/model.h5')
+with open('model/labels.json') as f:
+    class_to_label = json.load(f)
 
 def feed(inputPath):
     print(f"Feeding AI:  {inputPath}")
     print("This is the time to make a prediction.")
-    bulb.changeLight()
+
+    img = image.load_img(inputPath, target_size=(64, 64), color_mode='grayscale')  # Adjust size and color mode
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)  # Create a batch
+    img_array /= 255.0  # Normalize
+
+    # Make a prediction
+    predictions = model.predict(img_array)
+    print(predictions)
+    predicted_class = np.argmax(predictions, axis=1)
+    print(predicted_class)
+    predicted_label = class_to_label[str(predicted_class[0])]
+    print(predicted_label)
+
+
+
+    #bulb.changeLight()
     # #class_names = load_class_names_from_json('class_names.json')
     # print('will make a guess of ' + inputPath)
 

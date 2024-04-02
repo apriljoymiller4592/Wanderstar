@@ -4,6 +4,16 @@ import numpy as np
 from AI import feed as feedAI
 debug = False
 
+def cropImage(image):
+    white_pixels = cv2.findNonZero(image)
+
+    # Find the bounding rectangle
+    x, y, w, h = cv2.boundingRect(white_pixels)
+
+    # Crop the image to the bounding rectangle
+    cropped_image = image[y:y+h, x:x+w]
+    return cropped_image
+
 folder_path = 'pics/traces'
 os.makedirs(folder_path, exist_ok=True)
 for filename in os.listdir(folder_path):
@@ -18,7 +28,7 @@ params.maxThreshold = 200
 params.filterByArea = True
 params.minArea = 500
 params.filterByCircularity = True
-params.minCircularity = 0.01
+params.minCircularity = 0.001
 params.filterByConvexity = True
 params.minConvexity = 0.1
 params.filterByInertia = True
@@ -38,9 +48,9 @@ beta = -50 # Brightness control (0-100)
 threshold = 50
 
 delta = None
-movingThreshold = 3
+movingThreshold = 1
 idleCount = 0
-idleCountTolerance = 10
+idleCountTolerance = 5
 moving = False
 movingCount = 0
 cycleCount = 0
@@ -55,6 +65,7 @@ while True:
 
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray_frame = cv2.convertScaleAbs(gray_frame, alpha=alpha, beta=beta)
+    gray_frame = cv2.flip(gray_frame, 1)#flipp frame
     ret, gray_frame = cv2.threshold(gray_frame, threshold, 255, cv2.THRESH_BINARY)#127 is highest threshhold
     
     keypoints = detector.detect(gray_frame)
@@ -129,8 +140,10 @@ while True:
                 prevPoint = blob_path[i]
 
             imagePath = f'pics/traces/{imageCount}_trace_image.png'
-            cv2.imwrite(imagePath, gray_frame)
+            croppedImage = cropImage(gray_frame)
+            cv2.imwrite(imagePath, croppedImage)
             feedAI(imagePath)
+            
             trace_image = None
             blob_path = []
             idleCount = 0
