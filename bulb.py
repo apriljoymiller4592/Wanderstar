@@ -1,4 +1,4 @@
-import colour as c
+#import colour as c
 import time
 
 # MAC_ADDRESS: 9C:3F:60:74:F4:C5:9F:4E

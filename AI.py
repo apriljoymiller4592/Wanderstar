@@ -12,18 +12,21 @@ from keras.models import load_model
 from keras.applications.mobilenet_v2 import preprocess_input
 from keras.preprocessing import image
 import tensorflow as tf
+import bulb
 
 #import bulb
 class_to_label = "Not_Loaded_Yet"
-model = tf.keras.models.load_model('model/model.h5')
+model = tf.keras.models.load_model('model/best_model.h5')
 with open('model/labels.json') as f:
     class_to_label = json.load(f)
+
+#model = tf.keras.models.load_model('best.h5')
 
 def feed(inputPath):
     print(f"Feeding AI:  {inputPath}")
     print("This is the time to make a prediction.")
 
-    img = image.load_img(inputPath, target_size=(64, 64), color_mode='grayscale')  # Adjust size and color mode
+    img = image.load_img(inputPath, target_size=(224, 224), color_mode='rgb')  # Adjust size and color mode
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)  # Create a batch
     img_array /= 255.0  # Normalize
@@ -35,8 +38,14 @@ def feed(inputPath):
     print(predicted_class)
     predicted_label = class_to_label[str(predicted_class[0])]
     print(predicted_label)
-
-
+    if predicted_label == 'Z':
+        bulb.switch("turn", "on")
+    elif predicted_label == 'Circle':
+        bulb.change_color("color", 255, 0, 0)
+    elif predicted_label == 'Triangle':
+        bulb.change_color("color", 0, 0, 255)
+    elif predicted_label == 'Unspecified':
+        bulb.switch("turn", "off")
 
     #bulb.changeLight()
     # #class_names = load_class_names_from_json('class_names.json')

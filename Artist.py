@@ -1,7 +1,7 @@
 import cv2
 import os
 import numpy as np
-from AI import feed as feedAI
+import AI
 debug = False
 
 def cropImage(image):
@@ -18,9 +18,9 @@ folder_path = 'pics/traces'
 os.makedirs(folder_path, exist_ok=True)
 for filename in os.listdir(folder_path):
     file_path = os.path.join(folder_path, filename)
-    
+
     if os.path.isfile(file_path) and filename.lower().endswith(('.png')):
-        os.remove(file_path)  
+        os.remove(file_path)
 
 params = cv2.SimpleBlobDetector_Params()
 params.minThreshold = 10
@@ -60,17 +60,18 @@ while True:
         print(f"===Cycle {cycleCount}")
     cycleCount += 1
     ret, frame = cap.read()
+    frame_flipped = cv2.flip(frame, 1)
     if not ret:
         break
 
-    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    gray_frame = cv2.cvtColor(frame_flipped, cv2.COLOR_BGR2GRAY)
     gray_frame = cv2.convertScaleAbs(gray_frame, alpha=alpha, beta=beta)
     gray_frame = cv2.flip(gray_frame, 1)#flipp frame
     ret, gray_frame = cv2.threshold(gray_frame, threshold, 255, cv2.THRESH_BINARY)#127 is highest threshhold
-    
+
     keypoints = detector.detect(gray_frame)
     points = cv2.KeyPoint_convert(keypoints)
-    
+
     blobPresent = False
     if len(points) > 0:
         blobPresent = True
@@ -88,7 +89,6 @@ while True:
                 print("blob born")
             moving = True
 
-        
         if len(blob_path) > 0:
             delta = abs(blob_path[-1] - point)
             dx,dy = delta
@@ -96,7 +96,7 @@ while True:
                 print (delta)
             if (dx > movingThreshold and dy > movingThreshold) or blobBorn:
                 moving = True
-            else: 
+            else:
                 moving = False
         delta = None
     else:
@@ -104,25 +104,25 @@ while True:
             print("empty")
 
     if moving:
-        idleCount = 0 
+        idleCount = 0
         movingCount += 1
         if debug:
             print("moving->" + f" {movingCount}")
-    else: 
-        idleCount += 1 
+    else:
+        idleCount += 1
         if blobPresent:
             if debug:
                 print("idleing...")
                 print(f"idleCount: {idleCount}")
-        
-    if moving: 
+
+    if moving:
         if debug:
             print('Tracing []')
         blob_path.append(point)
 
     if len(blob_path) > 0:
         for i in range(1, len(blob_path)):
-            cv2.line(frame, tuple(np.intp(blob_path[i-1])), tuple(np.intp(blob_path[i])), (0, 255, 0), 15)
+            cv2.line(frame_flipped, tuple(np.intp(blob_path[i-1])), tuple(np.intp(blob_path[i])), (0, 255, 0), 15)
             cv2.line(gray_frame, tuple(np.intp(blob_path[i-1])), tuple(np.intp(blob_path[i])), (255, 255, 255), 15)
 
     if idleCount > idleCountTolerance :
@@ -131,8 +131,8 @@ while True:
             if debug:
                 print('TRACED')
             imageCount += 1
-            
-            trace_image = np.zeros_like(frame)
+
+            trace_image = np.zeros_like(frame_flipped)
             prevPoint = [0,0]
             for i in range(1, len(blob_path)):
                 cv2.line(trace_image, tuple(np.intp(blob_path[i-1])), tuple(np.intp(blob_path[i])), (0, 255, 0), 15)
@@ -142,16 +142,16 @@ while True:
             imagePath = f'pics/traces/{imageCount}_trace_image.png'
             croppedImage = cropImage(gray_frame)
             cv2.imwrite(imagePath, croppedImage)
-            feedAI(imagePath)
-            
+            AI.feed(imagePath)
+
+            cv2.imwrite(imagePath, gray_frame)
+            AI.feed(imagePath)
             trace_image = None
             blob_path = []
             idleCount = 0
-    
 
-
-    im_with_keypoints = cv2.drawKeypoints(frame, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-    gray_frame = cv2.drawKeypoints(gray_frame, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    im_with_keypoints = cv2.drawKeypoints(frame_flipped, keypoints, np.array([]), (0, 0, 255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    gray_frame = cv2.drawKeypoints(gray_frame, keypoints, np.array([]), (0, 0, 255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
     cv2.imshow("Keypoints", im_with_keypoints)
     cv2.imshow("Proccesed", gray_frame)
