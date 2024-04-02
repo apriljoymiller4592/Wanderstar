@@ -13,20 +13,26 @@ from keras.applications.mobilenet_v2 import preprocess_input
 from keras.preprocessing import image
 import tensorflow as tf
 
+import bulb
+
+#model = tf.keras.models.load_model('best.h5')
 
 def feed(inputPath):
-    #class_names = load_class_names_from_json('class_names.json')
-    print('will make a guess of ' + inputPath)
+    print(f"Feeding AI:  {inputPath}")
+    print("This is the time to make a prediction.")
+    bulb.changeLight()
+    # #class_names = load_class_names_from_json('class_names.json')
+    # print('will make a guess of ' + inputPath)
 
-    predictions = model.predict(preprocess_image(inputPath))
-    print(f"predictions: {predictions}")
-    class_names = load_class_names_from_json('names.json')
+    # predictions = model.predict(preprocess_image(inputPath))
+    # print(f"predictions: {predictions}")
+    # class_names = load_class_names_from_json('names.json')
 
-    predicted_class = interpret_predictions(predictions, class_names)
-    print(f"Predicted class: {predicted_class}")
+    # predicted_class = interpret_predictions(predictions, class_names)
+    # print(f"Predicted class: {predicted_class}")
 
-    print(class_names)
-    print(predicted_class)
+    # print(class_names)
+    # print(predicted_class)
 
 def load_class_names_from_json(file_path):
     with open(file_path, 'r') as file:
@@ -48,7 +54,7 @@ def interpret_predictions(predictions, class_names):
 
 
 
-model = tf.keras.models.load_model('best.h5')
+
 
 
 
