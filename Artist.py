@@ -127,7 +127,7 @@ while True:
 
     if idleCount > idleCountTolerance :
 
-        if len (blob_path) > 1:
+        if len (blob_path) > 20:
             if debug:
                 print('TRACED')
             imageCount += 1
