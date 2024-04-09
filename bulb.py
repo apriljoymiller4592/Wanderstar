@@ -1,8 +1,8 @@
 import requests
 import time
 
-api_key = '306802d6-b755-4826-b6b1-c28b94bbc317'
-device_id = '9C:3F:60:74:F4:C5:9F:4E'
+api_key = 'a7155454-e929-40d6-9397-46ba6115a47e'
+device_id = '52:88:60:74:F4:97:F4:7A'
 base_url = 'https://developer-api.govee.com/v1/devices/control'
 
 headers = {
@@ -13,7 +13,7 @@ headers = {
 def switch(name, value):
     body = {
         'device': device_id,
-        'model': 'H6009',
+        'model': 'H6008',
         'cmd': {
             'name': name,
             'value': value
@@ -25,7 +25,7 @@ def switch(name, value):
 def change_color(name, r, g, b):
     body = {
         'device': device_id,
-        'model': 'H6009',
+        'model': 'H6008',
         'cmd': {
             'name': name,
             'value': {
@@ -39,4 +39,4 @@ def change_color(name, r, g, b):
     print(response.text)
 
 
-switch("turn", "off")
+switch("turn", "on")

@@ -2,7 +2,11 @@ import cv2
 import os
 import numpy as np
 import AI
+import Slides
 debug = False
+
+
+Slides.open_presentation()
 
 def cropImage(image):
     white_pixels = cv2.findNonZero(image)

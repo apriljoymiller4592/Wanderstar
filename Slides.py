@@ -1,58 +1,59 @@
-import os.path
+import time
+import platform
 
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-
-api_key = 'AIzaSyD0R9cMmXNiUkxm55qs0sX2PbXFD_9VoWw'
-
-presentation_id = '1wDNJq-P3GPpxxrohNSpwDFzGG-mjdX6XdSuuGgJq30c'
-
-scopes = ['https://www.googleapis.com/auth/presentations.readonly']
-
-def main():
-  """Shows basic usage of the Slides API.
-  Prints the number of slides and elements in a sample presentation.
-  """
-  creds = None
-  # The file token.json stores the user's access and refresh tokens, and is
-  # created automatically when the authorization flow completes for the first
-  # time.
-  if os.path.exists("token.json"):
-    creds = Credentials.from_authorized_user_file("token.json", scopes)
-  # If there are no (valid) credentials available, let the user log in.
-  if not creds or not creds.valid:
-    if creds and creds.expired and creds.refresh_token:
-      creds.refresh(Request())
-    else:
-      flow = InstalledAppFlow.from_client_secrets_file(
-          "client_secret.json", scopes
-      )
-      creds = flow.run_local_server(port=0)
-    # Save the credentials for the next run
-    with open("token.json", "w") as token:
-      token.write(creds.to_json())
-
-  try:
-    service = build("slides", "v1", credentials=creds)
-
-    # Call the Slides API
-    presentation = (
-        service.presentations().get(presentationId=presentation_id).execute()
-    )
-    slides = presentation.get("slides")
-
-    print(f"The presentation contains {len(slides)} slides:")
-    for i, slide in enumerate(slides):
-      print(
-          f"- Slide #{i + 1} contains"
-          f" {len(slide.get('pageElements'))} elements."
-      )
-  except HttpError as err:
-    print(err)
+import pyautogui
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains as AC
+import webbrowser
 
 
-if __name__ == "__main__":
-  main()
+class GoogleSlidesViewer:
+    def init(self, presentation_id):
+        self.presentation_id = presentation_id
+        self.url = f"https://docs.google.com/presentation/d/%7Bpresentation_id%7D"
+        self.page = webbrowser.open(self.url, 1)
+
+    def open_presentation(self):
+        try:
+            if self.page == True:
+                time.sleep(5)
+                pyautogui.keyDown("Command")
+                pyautogui.keyDown("Enter")
+                pyautogui.keyUp("Command")
+                pyautogui.keyUp("Enter")
+                print("Presentation opened")
+        except Exception as e:
+            print(f"Failed to open the presentation: {e}")
+
+    def startpresentation(self, driver):
+        os = platform.system()
+        if os == 'Windows':
+            print(f"{os} beginning presentation")
+            driver.findelementby_tag_name('body').send_keys(Keys.SPACE)
+        elif os == 'Darwin':
+            print(f"{os} beginning presentation")
+            AC(driver).key_down(Keys.COMMAND).key_down(Keys.SHIFT).send_keys(Keys.ENTER).perform()
+
+        else:
+            print("Unsupported operating system")
+
+    def next(self):
+        pyautogui.keyDown("down")
+        pyautogui.keyUp("down")
+
+    def previous(self):
+        pyautogui.keyDown("up")
+        pyautogui.keyUp("up")
+
+    def exit(self):
+        self.page.close()
+
+
+if __name__ == '__main':
+    PRESENTATION_ID = "1CricEs7HjbHiU-u3Tjz1jwQGpd2yq_AN61BhtI3YG24"
+    slides_viewer = GoogleSlidesViewer(PRESENTATION_ID)
+    slides_viewer.open_presentation()
+    while (True):
+        time.sleep(5)
+        slides_viewer.next()
