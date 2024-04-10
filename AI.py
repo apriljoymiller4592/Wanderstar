@@ -64,7 +64,7 @@ def feed(inputPath):
         elif predicted_label == 'Circle':
             bulb.change_color("color", 255, 0, 0)
         elif predicted_label == 'Triangle':
-            Slides.open_presentation()
+            bulb.change_color("color", 0, 255, 0)
 
 
 
