@@ -76,6 +76,9 @@ cycleCount = 0
 backgroundRemoved = False
 fg_removed = None
 
+ret, init_frame = cap.read()
+cv2.imshow("Keypoints", np.zeros((init_frame.shape[0], init_frame.shape[1], 3), dtype=np.uint8))
+
 # Main loop
 while True:
     # Increment cycle count
@@ -129,7 +132,6 @@ while True:
                 im_with_keypoints = cv2.bitwise_and(frame_flipped, frame_flipped, mask=mask)
 
                 cv2.imshow("Keypoints", im_with_keypoints)
-
             delta = abs(blob_path[-1] - point)
             dx, dy = delta
             if (dx > movingThreshold and dy > movingThreshold) or blobBorn:
@@ -138,10 +140,12 @@ while True:
                 moving = False
         delta = None
     else:
-        im_with_keypoints = cv2.drawKeypoints(frame_flipped, keypoints, np.array([]), (0, 0, 255),
-                                              cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-        cv2.imshow("Keypoints", im_with_keypoints)
-        fg_removed = gray_frame.copy()
+        pass
+        #im_with_keypoints = cv2.drawKeypoints(frame_flipped, keypoints, np.array([]), (0, 0, 255),
+           #                                   cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        #cv2.imshow("Keypoints", im_with_keypoints)
+        #fg_removed = gray_frame.copy()
+
 
     # Update state based on movement detection
     if moving:
