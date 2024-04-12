@@ -5,9 +5,9 @@ from pylibfreenect2 import Freenect2, SyncMultiFrameListener
 from pylibfreenect2 import FrameType, Registration, Frame
 from pylibfreenect2 import createConsoleLogger, setGlobalLogger
 from pylibfreenect2 import LoggerLevel
-#from AI import feed as feedAI
+from AI import feed as feedAI
 
-debug = False
+debug = True
 import sys
 
 
@@ -231,7 +231,7 @@ while True:
             croppedImage = cropImage(trace_image)
             cv2.imwrite(imagePath, croppedImage)
 
-            #feedAI(imagePath)
+            feedAI(imagePath)
 
             trace_image = None
             blob_path = []
