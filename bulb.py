@@ -39,4 +39,4 @@ def change_color(name, r, g, b):
     print(response.text)
 
 
-switch("turn", "on")
+#switch("turn", "on")

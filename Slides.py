@@ -2,16 +2,13 @@ import time
 import platform
 
 import pyautogui
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains as AC
+
 import webbrowser
 
-
 class GoogleSlidesViewer:
-    def init(self, presentation_id):
+    def __init__(self, presentation_id):
         self.presentation_id = presentation_id
-        self.url = f"https://docs.google.com/presentation/d/%7Bpresentation_id%7D"
+        self.url = f"https://docs.google.com/presentation/d/{presentation_id}"
         self.page = webbrowser.open(self.url, 1)
 
     def open_presentation(self):
@@ -30,11 +27,8 @@ class GoogleSlidesViewer:
         os = platform.system()
         if os == 'Windows':
             print(f"{os} beginning presentation")
-            driver.findelementby_tag_name('body').send_keys(Keys.SPACE)
         elif os == 'Darwin':
             print(f"{os} beginning presentation")
-            AC(driver).key_down(Keys.COMMAND).key_down(Keys.SHIFT).send_keys(Keys.ENTER).perform()
-
         else:
             print("Unsupported operating system")
 
@@ -50,10 +44,11 @@ class GoogleSlidesViewer:
         self.page.close()
 
 
-if __name__ == '__main':
-    PRESENTATION_ID = "1CricEs7HjbHiU-u3Tjz1jwQGpd2yq_AN61BhtI3YG24"
-    slides_viewer = GoogleSlidesViewer(PRESENTATION_ID)
-    slides_viewer.open_presentation()
-    while (True):
-        time.sleep(5)
-        slides_viewer.next()
+if __name__ == '__main__':
+    print("here")
+    #PRESENTATION_ID = "1CricEs7HjbHiU-u3Tjz1jwQGpd2yq_AN61BhtI3YG24"
+    #slides_viewer = GoogleSlidesViewer(PRESENTATION_ID)
+   # slides_viewer.open_presentation()
+    #while True:
+    #    time.sleep(5)
+     #   slides_viewer.next()
