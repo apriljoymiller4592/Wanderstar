@@ -1,2 +1,6 @@
-
-.vscode/launch.json
+.DS_Store
+__pycache__/
+model/.DS_Store
+pics/
+Traces/
+.cache
