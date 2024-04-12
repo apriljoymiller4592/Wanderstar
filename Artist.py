@@ -123,7 +123,7 @@ while True:
     if len(blob_path) > 0:
         for i in range(1, len(blob_path)):
             cv2.line(frame, tuple(np.intp(blob_path[i-1])), tuple(np.intp(blob_path[i])), (0, 255, 0), 15)
-            cv2.line(gray_frame, tuple(np.intp(blob_path[i-1])), tuple(np.intp(blob_path[i])), (255, 255, 255), 15)
+            cv2.line(gray_frame, tuple(np.intp(blob_path[i-1])), tuple(np.intp(blob_path[i])), 255, 15)
 
     if idleCount > idleCountTolerance :
 
@@ -132,15 +132,15 @@ while True:
                 print('TRACED')
             imageCount += 1
             
-            trace_image = np.zeros_like(frame)
+            trace_image = np.zeros_like(gray_frame)
             prevPoint = [0,0]
             for i in range(1, len(blob_path)):
-                cv2.line(trace_image, tuple(np.intp(blob_path[i-1])), tuple(np.intp(blob_path[i])), (0, 255, 0), 15)
+                cv2.line(trace_image, tuple(np.intp(blob_path[i-1])), tuple(np.intp(blob_path[i])), 255, 15)
                 #print(f"{blob_path[i]} delta: {abs(blob_path[i]-prevPoint)}")
                 prevPoint = blob_path[i]
 
             imagePath = f'pics/traces/{imageCount}_trace_image.png'
-            croppedImage = cropImage(gray_frame)
+            croppedImage = cropImage(trace_image)
             cv2.imwrite(imagePath, croppedImage)
             feedAI(imagePath)
             
