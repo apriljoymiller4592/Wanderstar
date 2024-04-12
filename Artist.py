@@ -149,12 +149,18 @@ while True:
     sixteenbit_gray_frame = ir_frame.asarray() * (255.0 / 65535.0)
     eightbit_gray_frame = cv2.convertScaleAbs(sixteenbit_gray_frame)
     gray_frame =eightbit_gray_frame
+
+    
+    """
     print(gray_frame)
     print(type(gray_frame))
     print(gray_frame.shape)
     print(np.max(gray_frame))
     max_in_columns = np.max(gray_frame, axis=0)
     print("Maximum in each column:", max_in_columns)
+    """
+
+
     # Convert the frame to grayscale
     #gray_frame = cv2.cvtColor(frame_flipped, cv2.COLOR_BGR2GRAY)
     # Adjust contrast and brightness
