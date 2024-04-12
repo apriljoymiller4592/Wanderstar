@@ -12,13 +12,28 @@ from keras.models import load_model
 from keras.applications.mobilenet_v2 import preprocess_input
 from keras.preprocessing import image
 import tensorflow as tf
+import Slides
+import bulb
 
-#import bulb
 class_to_label = "Not_Loaded_Yet"
 model = tf.keras.models.load_model('model/model_2.0.h5')
 with open('model/labels.json') as f:
     class_to_label = json.load(f)
 
+print(f"Tensorflow Version: {tf.__version__}")
+"""
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+tflite_model = converter.convert()
+
+with open('model.tflite', 'wb') as f:
+    f.write(tflite_model)
+
+interpreter = tf.lite.Interpreter(model_path="model.tflite")
+interpreter.allocate_tensors()
+
+input_details = interpreter.get_input_details()
+output_details = interpreter.get_output_details()
+"""
 def feed(inputPath):
     print(f"Feeding AI:  {inputPath}")
     print("This is the time to make a prediction.")
@@ -36,41 +51,12 @@ def feed(inputPath):
     predicted_label = class_to_label[str(predicted_class[0])]
     print(predicted_label)
 
-
-
-    #bulb.changeLight()
-    # #class_names = load_class_names_from_json('class_names.json')
-    # print('will make a guess of ' + inputPath)
-
-    # predictions = model.predict(preprocess_image(inputPath))
-    # print(f"predictions: {predictions}")
-    # class_names = load_class_names_from_json('names.json')
-
-    # predicted_class = interpret_predictions(predictions, class_names)
-    # print(f"Predicted class: {predicted_class}")
-
-    # print(class_names)
-    # print(predicted_class)
-
-def load_class_names_from_json(file_path):
-    with open(file_path, 'r') as file:
-        class_ids = json.load(file)
-    inverted_class_ids = {v: k for k, v in class_ids.items()}
-    return inverted_class_ids
-
-
-def preprocess_image(image_path):
-    img = image.load_img(image_path, target_size=(224, 224))
-    img_array = image.img_to_array(img)
-    img_array_expanded_dims = np.expand_dims(img_array, axis=0)
-    return preprocess_input(img_array_expanded_dims)
-
-
-def interpret_predictions(predictions, class_names):
-    class_idx = np.argmax(predictions[0])
-    return class_names[class_idx]
-
-
+    if predicted_label == 'Z':
+        bulb.switch("turn", "on")
+    elif predicted_label == 'Circle':
+        bulb.change_color("color", 255, 0, 0)
+    elif predicted_label == 'Triangle':
+        bulb.change_color("color", 0, 255, 0)
 
 
 
