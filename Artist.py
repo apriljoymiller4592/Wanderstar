@@ -178,6 +178,7 @@ while True:
 
     point = [0, 0]
     fg_removed = gray_frame.copy()
+    moving = False
     if blobPresent:
         point = points[0]
         blobBorn = False
