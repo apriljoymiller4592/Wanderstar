@@ -11,7 +11,7 @@ from keras.models import load_model
 from keras.applications.mobilenet_v2 import preprocess_input
 from keras.preprocessing import image
 import tensorflow as tf
-import Slides
+#import Slides
 import bulb
 
 print(tf.__version__)
