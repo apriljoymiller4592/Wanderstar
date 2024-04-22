@@ -11,18 +11,15 @@ from keras.models import load_model
 from keras.applications.mobilenet_v2 import preprocess_input
 from keras.preprocessing import image
 import tensorflow as tf
-<<<<<<< HEAD
-#import Slides
-=======
+
 
 import Music
-import Slides
->>>>>>> origin/main
+#import Slides
 import bulb
 import Shelly as shelly
 from Music import MusicPlayer
 import threading
-
+import httparduinoclient as arduino
 print(tf.__version__)
 
 class_to_label = "Not_Loaded_Yet"
@@ -84,14 +81,9 @@ def feed(inputPath):
 
         if predicted_label == 'Square':
             bulb.switch("turn", "on")
-            bulb.change_color("color", 0, 0, 255)
-            time.sleep(1)
-            bulb.change_color("color", 0, 255, 0)
-            time.sleep(1)
-            bulb.change_color("color", 255, 0, 0)
         elif predicted_label == 'Squiggle':
             PRESENTATION_ID = "1CricEs7HjbHiU-u3Tjz1jwQGpd2yq_AN61BhtI3YG24"
-            viewer = Slides.GoogleSlidesViewer(PRESENTATION_ID)
+            #viewer = Slides.GoogleSlidesViewer(PRESENTATION_ID)
         elif predicted_label == 'Triangle':
             bulb.switch("turn", "off")
         elif predicted_label == 'Right Arrow':
@@ -108,6 +100,7 @@ def feed(inputPath):
             player.play_pause()
         elif predicted_label == 'Circle':
             print("Open box")
+            arduino.moveActuator()
         elif predicted_label == 'Z':
             PRESENTATION_ID = "1CricEs7HjbHiU-u3Tjz1jwQGpd2yq_AN61BhtI3YG24"
-            viewer = Slides.GoogleSlidesViewer(PRESENTATION_ID).next()
+            #viewer = Slides.GoogleSlidesViewer(PRESENTATION_ID).next()

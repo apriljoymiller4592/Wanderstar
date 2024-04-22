@@ -1,6 +1,13 @@
 {
-  "0": "Circle",
-  "1": "Triangle",
-  "2": "Z",
-  "3": "Junk"
+  "0": "U",
+  "1": "Circle",
+  "2": "Junk",
+  "3": "Left Arrow",
+  "4": "Right Arrow",
+  "5": "Square",
+  "6": "Squiggle",
+  "7": "Star",
+  "8": "Triangle",
+  "9": "Upside Down U",
+  "10": "Z"
 }

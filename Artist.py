@@ -5,12 +5,12 @@ from pylibfreenect2 import Freenect2, SyncMultiFrameListener
 from pylibfreenect2 import FrameType, Registration, Frame
 from pylibfreenect2 import createConsoleLogger, setGlobalLogger
 from pylibfreenect2 import LoggerLevel
-#from AI import feed as feedAI
+from AI import feed as feedAI
 import time
 
 debug = True
 import sys
-
+import threading 
 
 try:
     from pylibfreenect2 import OpenGLPacketPipeline
@@ -119,36 +119,32 @@ beta = -50
 threshold = 254
 
 # Threshold for detecting movement
-movingThreshold = 2
+movingThreshold = 1
 idleCount = 0
 idleCountTolerance = 5 
 moving = False
 movingCount = 0
 cycleCount = 0
+frames = None
+
+def getNextFrame():
+    global frames
+    frames= listener.waitForNewFrame()
+
+frame_thread = threading.Thread(target=getNextFrame)
+frame_thread.start()
 
 
+times = []
 # Main loop
 while True:
+    start_time = time.time()
     
-
-    # Increment cycle count
-    """
-    cycleCount += 1
-    if debug:
-        print(f"===Cycle {cycleCount}")
-    cycleCount += 1
-    
-    # Read a frame from the video capture
-    ret, frame = cap.read()
-    if not ret:
-        break
-
-    # Flip the frame horizontally
-    frame_flipped = cv2.flip(frame, 1)
-    """
-    frames = listener.waitForNewFrame()
-
+    frame_thread.join()
     ir_frame = frames["ir"]
+    frame_thread = threading.Thread(target=getNextFrame)
+    frame_thread.start()
+    
     #gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     sixteenbit_gray_frame = ir_frame.asarray() * (255.0 / 65535.0)
     eightbit_gray_frame = cv2.convertScaleAbs(sixteenbit_gray_frame)
@@ -246,7 +242,7 @@ while True:
             
             
         
-            #feedAI(imagePath)
+            feedAI(imagePath)
             #device.start()
 
 
@@ -262,12 +258,22 @@ while True:
     # Break the loop if 'q' is pressed
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+    end_time = time.time()
+    times.append(end_time - start_time)
     
 
 # Release video capture and close windows
 #cap.release()
+
+
 device.stop()
 device.close()
-
+total_time = 0
+for time in times:
+    total_time += time
+    
+print(total_time/len(times))
 sys.exit(0)
 cv2.destroyAllWindows()
+
+
