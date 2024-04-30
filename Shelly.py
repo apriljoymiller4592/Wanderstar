@@ -12,3 +12,14 @@ def turn_on_or_off(ip, value):
         print("Response:", response.text)
 
     return response
+    
+def get_shelly_status(ip):
+    url = f"http://{ip}/rpc/status"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        ptint(response.json())  
+        return response.json()   
+    except requests.RequestException as e:
+        print(f"Error fetching device status: {e}")
+        return None

@@ -11,6 +11,9 @@ import time
 debug = True
 import sys
 import threading 
+from bulb import  goveeLight
+
+bulb = goveeLight()
 
 try:
     from pylibfreenect2 import OpenGLPacketPipeline
@@ -91,7 +94,7 @@ params = cv2.SimpleBlobDetector_Params()
 params.minThreshold = 10
 params.maxThreshold = 200
 params.filterByArea = True
-params.minArea = 5
+params.minArea = 2
 params.filterByCircularity = True
 params.minCircularity = 0.3
 params.filterByConvexity = True
@@ -119,11 +122,11 @@ beta = -50
 threshold = 254
 
 # Threshold for detecting movement
-movingThreshold = 1
-idleCount = 0
-idleCountTolerance = 5 
+movingThreshold = .25
+idleCount = 2
+idleCountTolerance = 3 
 moving = False
-movingCount = 0
+movingCount = 5
 cycleCount = 0
 frames = None
 
@@ -193,6 +196,8 @@ while True:
         if len(blob_path) > 0:
             delta = abs(blob_path[-1] - point)
             dx, dy = delta
+            print(dx)
+            print(dy)
             if (dx > movingThreshold and dy > movingThreshold) or blobBorn:
                 moving = True
             else:
@@ -242,7 +247,7 @@ while True:
             
             
         
-            feedAI(imagePath)
+            feedAI(imagePath,bulb)
             #device.start()
 
 
