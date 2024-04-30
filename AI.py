@@ -68,6 +68,8 @@ def feed(inputPath,bulb):
             bulb.brighten()
         elif predicted_label == "Left Arrow":
             bulb.dim()
+        elif predicted_label == "Z":
+            bulb.change_color()
         elif predicted_label == 'Squiggle':
             #slides.show_slides()
             print("hi")

@@ -32,6 +32,7 @@ class goveeLight:
             self.device_id, self.device_model = self.get_devices()
         url = f"https://developer-api.govee.com/v1/devices/state?device={self.device_id}&model={self.device_model}"
         properties = json.loads(requests.request("GET", url, headers=self.headers, data={}).text)['data']['properties']
+        print(properties)
         for prop in properties:
             if 'powerState' in prop:
                 self.powerState = prop['powerState']
@@ -140,19 +141,4 @@ class goveeLight:
                 f"\nDevice Powerstate: {self.powerState}\nDevice Brightness: {self.brightness}")
 
 
-if __name__ == '__main__':
-    api_key = '511eab0d-6846-4562-988c-5956ceb6a63a'
-    lightbulb = goveeLight(api_key)
-    lightbulb.dim()
-    time.sleep(5)
-    lightbulb.dim()
-    time.sleep(5)
-    lightbulb.brighten()
-    time.sleep(5)
-    lightbulb.brighten()
-    time.sleep(5)
-    for i in range(lightbulb.colorsSize * 2):
-        lightbulb.change_color()
-        time.sleep(5)
-
-
+    
