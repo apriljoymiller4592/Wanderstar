@@ -1,2 +1,2 @@
 #define SECRET_SSID "Wandspot"
-#define SECRET_PASS "wand1234"
+#define SECRET_PASS "Magicwand1234"
